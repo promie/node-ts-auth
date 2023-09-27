@@ -6,7 +6,10 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production tsnd --cls src/index.ts",
     "dev": "cross-env NODE_ENV=development tsnd --cls src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "formatting:check": "prettier --check ./src",
+    "formatting:write": "prettier --write ./src",
+    "lint": "eslint ./src --ext .ts,.js"
   },
   "keywords": [],
   "author": "",
