@@ -9,7 +9,11 @@
     "build": "tsc",
     "formatting:check": "prettier --check ./src",
     "formatting:write": "prettier --write ./src",
-    "lint": "eslint ./src --ext .ts,.js"
+    "lint": "eslint ./src --ext .ts,.js",
+    "prisma:format": "prisma format",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev --skip-seed",
+    "prisma:studio": "prisma studio"
   },
   "keywords": [],
   "author": "",
