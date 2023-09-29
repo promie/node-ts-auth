@@ -5,6 +5,4 @@ const login = (user: IUser) => {
   return user
 }
 
-export default {
-  login,
-}
+export default { login }

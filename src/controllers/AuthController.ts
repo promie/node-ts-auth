@@ -21,6 +21,4 @@ const login = catchAsync(
   },
 )
 
-export default {
-  login,
-}
+export default { login }
