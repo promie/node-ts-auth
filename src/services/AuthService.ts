@@ -12,11 +12,23 @@ const login = async (user: IUser) => {
     },
   )
 
+  // Decode the JWT to get the exp value
+  const decodedToken: any = jwt.decode(accessToken)
+  let ttl: number | undefined
+
+  if (decodedToken && decodedToken.exp) {
+    ttl = Math.round(
+      (new Date(decodedToken.exp * 1000).getTime() - new Date().getTime()) /
+        1000,
+    )
+  }
+
   const result = AuthRepository.login(user)
 
   return {
     result,
     accessToken,
+    ttl,
   }
 }
 
