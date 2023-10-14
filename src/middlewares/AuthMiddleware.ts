@@ -11,8 +11,13 @@ const verifyToken = (
   res: Response,
   next: NextFunction,
 ) => {
-  const authHeader = req.headers.authorization
-  const token = authHeader?.split(' ')[1]
+  let token = req.headers.authorization?.split(' ')[1]
+
+  // Check if the token is not found in the Authorization header.
+  // If not found, try to get it from the query string parameters
+  if (!token) {
+    token = req.query.token as string
+  }
 
   if (!token) {
     return res.status(401).json({
