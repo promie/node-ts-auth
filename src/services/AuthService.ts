@@ -19,6 +19,8 @@ const login = async (user: IUser) => {
     },
   )
 
+  // Put the refreshToken in the redis store
+
   // Decode the JWT to get the exp value
   const decodedToken: any = jwt.decode(accessToken)
   let ttl: number | undefined
@@ -30,10 +32,9 @@ const login = async (user: IUser) => {
     )
   }
 
-  const result = AuthRepository.login(user)
+  await AuthRepository.login(user)
 
   return {
-    result,
     accessToken,
     refreshToken,
     ttl,

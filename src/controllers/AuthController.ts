@@ -12,10 +12,10 @@ const login = catchAsync(
       })
     }
 
-    const hello = await AuthService.login({ username, password })
+    const data = await AuthService.login({ username, password })
 
     return res.json({
-      hello,
+      data,
       message: 'Login success',
     })
   },

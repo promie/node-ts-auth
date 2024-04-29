@@ -21,6 +21,7 @@ const verifyToken = (
 
   if (!token) {
     return res.status(401).json({
+      status: false,
       message: 'Token not found',
     })
   }
@@ -40,4 +41,48 @@ const verifyToken = (
   }
 }
 
-export default { verifyToken }
+const verifyRefreshToken = (
+  req: ExtendedRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  const token = req.body.token
+
+  if (!token) {
+    return res.status(401).json({
+      status: false,
+      message: 'Token not found',
+    })
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET as string)
+    req.userData = decoded
+    req.token = token
+
+    // Replace this with the real redis store
+    const refreshTokens: string[] = []
+
+    // Verify if token is in store or not
+    const storedRefreshToken = refreshTokens.find(
+      (x: any) => x.username === decoded.sub,
+    )
+
+    if (!storedRefreshToken) {
+      return res.status(401).json({
+        status: false,
+        message: 'Your session is not valid',
+      })
+    }
+
+    next()
+  } catch (error) {
+    return res.status(401).json({
+      status: false,
+      message: 'Your session is not valid',
+      data: error,
+    })
+  }
+}
+
+export default { verifyToken, verifyRefreshToken }
