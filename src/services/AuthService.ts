@@ -11,6 +11,13 @@ const login = async (user: IUser) => {
       expiresIn: process.env.JWT_ACCESS_TIME,
     },
   )
+  const refreshToken = jwt.sign(
+    { username: user.username },
+    process.env.JWT_REFRESH_SECRET as string,
+    {
+      expiresIn: process.env.JWT_REFRESH_TIME,
+    },
+  )
 
   // Decode the JWT to get the exp value
   const decodedToken: any = jwt.decode(accessToken)
@@ -28,6 +35,7 @@ const login = async (user: IUser) => {
   return {
     result,
     accessToken,
+    refreshToken,
     ttl,
   }
 }
