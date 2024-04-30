@@ -6,6 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production tsnd --cls src/index.ts",
     "dev": "cross-env NODE_ENV=development tsnd --cls src/index.ts",
+    "clean": "find . -name node_modules -type d -prune -exec rm -rf '{}' +",
     "build": "tsc",
     "formatting:check": "prettier --check ./src",
     "formatting:write": "prettier --write ./src",
