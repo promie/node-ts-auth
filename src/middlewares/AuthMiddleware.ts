@@ -6,6 +6,9 @@ interface ExtendedRequest extends Request {
   token?: string
 }
 
+// Temporary storage for refresh tokens. Will be replaced with Redis
+const refreshTokens: string[] = []
+
 const verifyToken = (
   req: ExtendedRequest,
   res: Response,
@@ -59,9 +62,6 @@ const verifyRefreshToken = (
     const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET as string)
     req.userData = decoded
     req.token = token
-
-    // Replace this with the real redis store
-    const refreshTokens: string[] = []
 
     // Verify if token is in store or not
     const storedRefreshToken = refreshTokens.find(

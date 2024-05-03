@@ -3,6 +3,9 @@ import 'dotenv/config'
 import { AuthRepository } from '../repositories'
 import { IUser } from '../types/user'
 
+// Temporary storage for refresh tokens. Will be replaced with Redis
+const refreshTokens: { username: string; token: string }[] = []
+
 const login = async (user: IUser) => {
   const accessToken = jwt.sign(
     { username: user.username },
@@ -19,7 +22,23 @@ const login = async (user: IUser) => {
     },
   )
 
-  // Put the refreshToken in the redis store
+  // Check if there is a token related to that user
+  const storedRefreshToken = refreshTokens.find(
+    (x: any) => x.username === user.username,
+  )
+
+  if (!storedRefreshToken) {
+    // add the token to the refreshTokens redis store
+    refreshTokens.push({
+      username: user.username,
+      token: refreshToken,
+    })
+  } else {
+    // Update it
+    refreshTokens[
+      refreshTokens.findIndex(x => x.username === user.username)
+    ].token = refreshToken
+  }
 
   // Decode the JWT to get the exp value
   const decodedToken: any = jwt.decode(accessToken)
