@@ -60,6 +60,9 @@ const login = async (user: IUser) => {
   }
 }
 
+const generateRefreshToken = async (username: string) => {}
+
 export default {
   login,
+  generateRefreshToken,
 }

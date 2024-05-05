@@ -30,10 +30,10 @@ const token = catchAsync(
       })
     }
 
-    const hello = await AuthService.login({ username, password })
+    const response = await AuthService.generateRefreshToken(username)
 
     return res.json({
-      hello,
+      data: response,
       message: 'Login success',
     })
   },
