@@ -12,13 +12,30 @@ const login = catchAsync(
       })
     }
 
-    const hello = await AuthService.login({ username, password })
+    const data = await AuthService.login({ username, password })
 
     return res.json({
-      hello,
+      data,
       message: 'Login success',
     })
   },
 )
 
-export default { login }
+const token = catchAsync(
+  async (req: Request | any, res: Response, _next: NextFunction) => {
+    const username = req.userData.sub
+
+    const accessToken = await AuthService.generateAccessToken(username)
+    const refreshToken = await AuthService.generateRefreshToken(username)
+
+    return res.json({
+      data: {
+        accessToken,
+        refreshToken,
+      },
+      message: 'Login success',
+    })
+  },
+)
+
+export default { login, token }

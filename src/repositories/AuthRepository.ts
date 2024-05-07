@@ -1,6 +1,6 @@
 import { IUser } from '../types/user'
 
-const login = (user: IUser) => {
+const login = async (user: IUser) => {
   // save to prisma client or database
   return user
 }
