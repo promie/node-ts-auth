@@ -60,7 +60,34 @@ const login = async (user: IUser) => {
   }
 }
 
-const generateRefreshToken = async (username: string) => {}
+const generateRefreshToken = async (username: string) => {
+  const refreshToken = jwt.sign(
+    { sub: username },
+    process.env.JWT_REFRESH_SECRET as string,
+    {
+      expiresIn: process.env.JWT_REFRESH_TIME,
+    },
+  )
+
+  // Check if there is a token related to that user
+  const storedRefreshToken = refreshTokens.find(
+    (x: any) => x.username === username,
+  )
+
+  if (!storedRefreshToken) {
+    // add the token to the refreshTokens redis store
+    refreshTokens.push({
+      username,
+      token: refreshToken,
+    })
+  } else {
+    // Update it
+    refreshTokens[refreshTokens.findIndex(x => x.username === username)].token =
+      refreshToken
+  }
+
+  return refreshToken
+}
 
 export default {
   login,
