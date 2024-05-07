@@ -22,13 +22,8 @@ const login = catchAsync(
 )
 
 const token = catchAsync(
-  async (req: Request, res: Response, _next: NextFunction) => {
-    const { username, password } = req.body
-    if (!username || !password) {
-      return res.status(httpStatus.BAD_REQUEST).json({
-        message: 'Username and password are required',
-      })
-    }
+  async (req: Request | any, res: Response, _next: NextFunction) => {
+    const username = req.userData.sub
 
     const response = await AuthService.generateRefreshToken(username)
 
