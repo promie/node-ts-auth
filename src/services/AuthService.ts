@@ -60,8 +60,6 @@ const generateRefreshToken = async (username: string) => {
       refreshToken
   }
 
-  console.log('refreshTokens', refreshTokens)
-
   return refreshToken
 }
 
