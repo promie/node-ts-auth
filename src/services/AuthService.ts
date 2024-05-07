@@ -2,9 +2,7 @@ import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 import { AuthRepository } from '../repositories'
 import { IUser } from '../types/user'
-
-// Temporary storage for refresh tokens. Will be replaced with Redis
-const refreshTokens: { username: string; token: string }[] = []
+import { refreshTokens } from '../redis-store'
 
 const login = async (user: IUser) => {
   const accessToken = await generateAccessToken(user.username)

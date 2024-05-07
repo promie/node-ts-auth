@@ -1,13 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
+import { refreshTokens } from '../redis-store'
 
 interface ExtendedRequest extends Request {
   userData?: any
   token?: string
 }
-
-// Temporary storage for refresh tokens. Will be replaced with Redis
-const refreshTokens: { username: string; token: string }[] = []
 
 const verifyToken = (
   req: ExtendedRequest,
