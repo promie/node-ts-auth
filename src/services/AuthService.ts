@@ -7,14 +7,8 @@ import { IUser } from '../types/user'
 const refreshTokens: { username: string; token: string }[] = []
 
 const login = async (user: IUser) => {
-  const accessToken = jwt.sign(
-    { username: user.username },
-    process.env.JWT_ACCESS_SECRET as string,
-    {
-      expiresIn: process.env.JWT_ACCESS_TIME,
-    },
-  )
-  const refreshToken = generateRefreshToken(user.username)
+  const accessToken = await generateAccessToken(user.username)
+  const refreshToken = await generateRefreshToken(user.username)
 
   // Decode the JWT to get the exp value
   const decodedToken: any = jwt.decode(accessToken)
@@ -34,6 +28,12 @@ const login = async (user: IUser) => {
     refreshToken,
     ttl,
   }
+}
+
+const generateAccessToken = async (username: string) => {
+  return jwt.sign({ username }, process.env.JWT_ACCESS_SECRET as string, {
+    expiresIn: process.env.JWT_ACCESS_TIME,
+  })
 }
 
 const generateRefreshToken = async (username: string) => {
@@ -67,5 +67,6 @@ const generateRefreshToken = async (username: string) => {
 
 export default {
   login,
+  generateAccessToken,
   generateRefreshToken,
 }

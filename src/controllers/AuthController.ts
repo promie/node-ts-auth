@@ -25,10 +25,14 @@ const token = catchAsync(
   async (req: Request | any, res: Response, _next: NextFunction) => {
     const username = req.userData.sub
 
-    const response = await AuthService.generateRefreshToken(username)
+    const accessToken = await AuthService.generateAccessToken(username)
+    const refreshToken = await AuthService.generateRefreshToken(username)
 
     return res.json({
-      data: response,
+      data: {
+        accessToken,
+        refreshToken,
+      },
       message: 'Login success',
     })
   },
