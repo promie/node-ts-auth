@@ -7,7 +7,7 @@ interface ExtendedRequest extends Request {
 }
 
 // Temporary storage for refresh tokens. Will be replaced with Redis
-const refreshTokens: string[] = []
+const refreshTokens: { username: string; token: string }[] = []
 
 const verifyToken = (
   req: ExtendedRequest,
@@ -69,6 +69,13 @@ const verifyRefreshToken = (
     )
 
     if (!storedRefreshToken) {
+      return res.status(401).json({
+        status: false,
+        message: 'Your session is not valid',
+      })
+    }
+
+    if (storedRefreshToken.token !== token) {
       return res.status(401).json({
         status: false,
         message: 'Your session is not valid',
