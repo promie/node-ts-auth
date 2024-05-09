@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 import { AuthRepository } from '../repositories'
 import { IUser } from '../types/user'
-import { refreshTokens } from '../redis-store'
+import { refreshTokens, removeToken } from '../redis-store'
 
 const login = async (user: IUser) => {
   const accessToken = await generateAccessToken(user.username)
@@ -25,6 +25,14 @@ const login = async (user: IUser) => {
     accessToken,
     refreshToken,
     ttl,
+  }
+}
+
+const logout = async (username: string) => {
+  removeToken(username)
+
+  return {
+    success: true,
   }
 }
 
@@ -65,6 +73,7 @@ const generateRefreshToken = async (username: string) => {
 
 export default {
   login,
+  logout,
   generateAccessToken,
   generateRefreshToken,
 }

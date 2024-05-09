@@ -21,6 +21,18 @@ const login = catchAsync(
   },
 )
 
+const logout = catchAsync(
+  async (req: Request | any, res: Response, _next: NextFunction) => {
+    const username = req.userData.sub
+
+    await AuthService.logout(username)
+
+    return res.json({
+      message: 'Logout success',
+    })
+  },
+)
+
 const token = catchAsync(
   async (req: Request | any, res: Response, _next: NextFunction) => {
     const username = req.userData.sub
@@ -38,4 +50,4 @@ const token = catchAsync(
   },
 )
 
-export default { login, token }
+export default { login, logout, token }
