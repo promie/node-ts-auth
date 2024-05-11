@@ -4,6 +4,29 @@ import { AuthRepository } from '../repositories'
 import { IUser } from '../types/user'
 import { refreshTokens, removeToken } from '../redis-store'
 
+const register = async (user: IUser) => {
+  const accessToken = await generateAccessToken(user.username)
+  const refreshToken = await generateRefreshToken(user.username)
+
+  // Decode the JWT to get the exp value
+  const decodedToken: any = jwt.decode(accessToken)
+  let ttl: number | undefined
+
+  if (decodedToken && decodedToken.exp) {
+    ttl = Math.round(
+      (new Date(decodedToken.exp * 1000).getTime() - new Date().getTime()) /
+        1000,
+    )
+  }
+
+  await AuthRepository.register(user)
+
+  return {
+    accessToken,
+    refreshToken,
+    ttl,
+  }
+}
 const login = async (user: IUser) => {
   const accessToken = await generateAccessToken(user.username)
   const refreshToken = await generateRefreshToken(user.username)
@@ -72,6 +95,7 @@ const generateRefreshToken = async (username: string) => {
 }
 
 export default {
+  register,
   login,
   logout,
   generateAccessToken,

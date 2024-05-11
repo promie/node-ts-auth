@@ -3,6 +3,24 @@ import httpStatus from 'http-status'
 import { catchAsync } from '../utils'
 import { AuthService } from '../services'
 
+const register = catchAsync(
+  async (req: Request, res: Response, _next: NextFunction) => {
+    const { username, password } = req.body
+    if (!username || !password) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        message: 'Username and password are required',
+      })
+    }
+
+    const data = await AuthService.register({ username, password })
+
+    return res.json({
+      data,
+      message: 'Login success',
+    })
+  },
+)
+
 const login = catchAsync(
   async (req: Request, res: Response, _next: NextFunction) => {
     const { username, password } = req.body
@@ -50,4 +68,4 @@ const token = catchAsync(
   },
 )
 
-export default { login, logout, token }
+export default { register, login, logout, token }
