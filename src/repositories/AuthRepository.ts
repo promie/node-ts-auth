@@ -14,8 +14,13 @@ const register = async (user: IUser) => {
 }
 
 const login = async (user: IUser) => {
-  // retrieve user from the database
-  return user
+  const dbUser = await prismadb.user.findUnique({
+    where: {
+      username: user.username,
+    },
+  })
+
+  return dbUser
 }
 
 export default { register, login }
