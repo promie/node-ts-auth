@@ -1,10 +1,15 @@
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
+import bcrypt from 'bcryptjs'
 import { AuthRepository } from '../repositories'
 import { IUser } from '../types/user'
 import { refreshTokens, removeToken } from '../redis-store'
 
 const register = async (user: IUser) => {
+  // Hash the password
+  const salt = await bcrypt.genSalt(10)
+  user.password = await bcrypt.hash(user.password, salt)
+
   const accessToken = await generateAccessToken(user.username)
   const refreshToken = await generateRefreshToken(user.username)
 
