@@ -16,7 +16,7 @@ const register = catchAsync(
 
     return res.json({
       data,
-      message: 'Login success',
+      message: 'Registration success',
     })
   },
 )
