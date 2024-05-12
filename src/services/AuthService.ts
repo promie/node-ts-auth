@@ -47,7 +47,14 @@ const login = async (user: IUser) => {
     )
   }
 
-  await AuthRepository.login(user)
+  const dbUser = await AuthRepository.login(user)
+
+  // Compare the password
+  const isMatch = await bcrypt.compare(user.password, dbUser.password)
+
+  if (!isMatch) {
+    throw new Error('Invalid credentials')
+  }
 
   return {
     accessToken,
